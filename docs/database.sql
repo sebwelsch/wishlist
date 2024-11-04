@@ -5,7 +5,7 @@ USE prod_db;
 CREATE TABLE IF NOT EXISTS users (
 user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 email varchar(255) NOT NULL,
-password varchar(50) NOT NULL,
+password varchar(255) NOT NULL,
 first_name varchar(255) NOT NULL,
 last_name varchar(255)
 );
