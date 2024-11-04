@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Repository
@@ -35,6 +36,30 @@ public class WishListRepository {
             pstmt.executeUpdate();
         } catch (SQLException error) {
             throw new RuntimeException("Error saving new user to database", error);
+        }
+    }
+
+    public User findByEmail(String email) {
+        String query = "SELECT * FROM users WHERE email = ?";
+        try (Connection connection = getDBConnection();
+             PreparedStatement pstmt = connection.prepareStatement(query)) {
+
+            pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                return user;
+            } else {
+                return null;
+            }
+
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving user from database", error);
         }
     }
 }
