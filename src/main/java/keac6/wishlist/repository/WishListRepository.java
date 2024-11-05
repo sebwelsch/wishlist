@@ -41,8 +41,8 @@ public class WishListRepository {
 
     public User findByEmail(String email) {
         String query = "SELECT * FROM users WHERE email = ?";
-        try (Connection connection = getDBConnection();
-             PreparedStatement pstmt = connection.prepareStatement(query)) {
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
 
             pstmt.setString(1, email);
             ResultSet rs = pstmt.executeQuery();

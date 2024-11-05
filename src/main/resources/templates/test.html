@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ønskebrønden</title>
+    <link rel="stylesheet" href="/static/main.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>Bruger side</h2>
+    <p>Denne side kan kun tilgås hvis man er logget ind</p>
+
+    <div th:if="${success}" style="color: green">
+        <p th:text="${success}"></p>
+    </div>
+</div>
+
+</body>
+</html>
