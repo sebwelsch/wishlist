@@ -9,10 +9,10 @@
 <body>
 
     <div class="container">
-        <h2>Opret bruger</h2>
-        <p>Opret en bruger for at kunne oprette ønskelister.</p>
 
         <form th:action="@{/signup}" method="post">
+            <h2>Opret konto</h2>
+            <p>Opret en konto for at kunne oprette ønskelister.</p>
             <div>
                 <label for="userFirstName">Fornavn</label>
                 <input type="text" id="userFirstName" name="firstName" required>
@@ -33,10 +33,12 @@
                 <input type="password" id="userPassword" name="password" required>
             </div>
             <button type="submit">Opret</button>
+
+            <p>Har du allerede en konto?</p>
+            <a href="/login">
+                <button>Log ind</button>
+            </a>
         </form>
-        <a href="/login">
-            <button>Log ind</button>
-        </a>
 
         <div th:if="${error}" style="color: red">
             <p th:text="${error}"></p>
