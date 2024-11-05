@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Opret en bruger - Ønskebrønden</title>
-    <link rel="stylesheet" href="/static/main.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 
@@ -33,12 +33,13 @@
                 <input type="password" id="userPassword" name="password" required>
             </div>
             <button type="submit">Opret</button>
-
+        </form>
+        <div class="form-container">
             <p>Har du allerede en konto?</p>
             <a href="/login">
                 <button>Log ind</button>
             </a>
-        </form>
+        </div>
 
         <div th:if="${error}" style="color: red">
             <p th:text="${error}"></p>

@@ -21,10 +21,11 @@ form {
     border: 1px solid #ddd;
     border-radius: 4px;
     background: #fff;
+    box-sizing: border-box;
 }
 
 form div {
-    margin-bottom: 15px;
+    margin-bottom: 15px; /* Space between each label-input pair */
 }
 
 input, button {
@@ -41,5 +42,28 @@ button {
 }
 
 button:hover {
+    background-color: lightgrey;
+}
+
+.form-container {
+    max-width: 300px; /* Same width as the form */
+    margin: 0 auto; /* Center align */
+    text-align: center;
+}
+
+.form-container p {
+    margin: 10px 0; /* Space above and below the text */
+}
+
+.form-container a button {
+    width: 100%; /* Full width button */
+    background-color: grey;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.form-container a button:hover {
     background-color: lightgrey;
 }
