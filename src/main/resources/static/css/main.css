@@ -25,7 +25,7 @@ form {
 }
 
 form div {
-    margin-bottom: 15px; /* Space between each label-input pair */
+    margin-bottom: 15px;
 }
 
 input, button {
@@ -46,17 +46,17 @@ button:hover {
 }
 
 .form-container {
-    max-width: 300px; /* Same width as the form */
-    margin: 0 auto; /* Center align */
+    max-width: 300px;
+    margin: 0 auto;
     text-align: center;
 }
 
 .form-container p {
-    margin: 10px 0; /* Space above and below the text */
+    margin: 10px 0;
 }
 
 .form-container a button {
-    width: 100%; /* Full width button */
+    width: 100%;
     background-color: grey;
     color: #fff;
     padding: 8px;
