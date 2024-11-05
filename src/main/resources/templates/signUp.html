@@ -32,8 +32,14 @@
                 <label for="userPassword">Password</label>
                 <input type="password" id="userPassword" name="password" required>
             </div>
+
+            <div th:if="${error}" class="danger">
+                <p th:text="${error}"></p>
+            </div>
+
             <button type="submit">Opret</button>
         </form>
+        
         <div class="form-container">
             <p>Har du allerede en konto?</p>
             <a href="/login">
@@ -41,9 +47,6 @@
             </a>
         </div>
 
-        <div th:if="${error}" style="color: red">
-            <p th:text="${error}"></p>
-        </div>
     </div>
 
 </body>

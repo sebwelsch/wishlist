@@ -67,3 +67,11 @@ button:hover {
 .form-container a button:hover {
     background-color: lightgrey;
 }
+
+.danger {
+    color: red;
+}
+
+.success {
+    color: green;
+}
