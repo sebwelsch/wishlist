@@ -21,8 +21,9 @@
                 <input type="password" id="userPassword" name="password" required>
             </div>
 
-            <div th:if="${error}" class="danger">
-                <p th:text="${error}"></p>
+            <div th:if="${success} or ${error}">
+                <p th:text="${success}" class="success" />
+                <p th:text="${error}" class="danger" />
             </div>
 
             <button type="submit">Log ind</button>

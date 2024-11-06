@@ -26,12 +26,13 @@ public class WishListController {
     }
 
     @PostMapping("/signup")
-    public String saveNewUser(@ModelAttribute User newUser, Model model) {
+    public String saveNewUser(@ModelAttribute User newUser, Model model, RedirectAttributes redirectAttributes) {
         if (wishListService.findByEmail(newUser.getEmail()) != null) {
             model.addAttribute("error", "Denne email er allerede registreret.");
             return "signUp";
         }
         wishListService.saveNewUser(newUser);
+        redirectAttributes.addFlashAttribute("success", "Din konto blev oprettet. Du kan nu logge ind.");
         return "redirect:/login";
     }
 
@@ -42,12 +43,12 @@ public class WishListController {
     }
 
     @PostMapping("/login")
-    public String verifyLogin(@RequestParam String email, @RequestParam String password, Model model, HttpSession session, RedirectAttributes redirectAttributes) {
+    public String verifyLogin(HttpSession session, @RequestParam String email, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
         User user = wishListService.findByEmail(email);
         if (user != null && wishListService.authenticate(password, user.getPassword())) {
             session.setAttribute("loggedInUser", user);
             redirectAttributes.addFlashAttribute("success", "Du er nu logget ind.");
-            return "redirect:/wishlist";
+            return "redirect:/overview";
         }
         model.addAttribute("error", "Email eller password er ikke korrekt. Prøv igen.");
         return "login";
@@ -57,6 +58,18 @@ public class WishListController {
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/login";
+    }
+
+    @GetMapping("/overview")
+    public String showOverviewPage(HttpSession session, Model model) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("firstName", loggedInUser.getFirstName());
+        model.addAttribute("lastName", loggedInUser.getLastName());
+        model.addAttribute("email", loggedInUser.getEmail());
+        return "overview";
     }
 
     @GetMapping("/wishlist")
@@ -70,7 +83,7 @@ public class WishListController {
     }
 
     @PostMapping("/wishlist/create")
-    public String createWishList(HttpSession session, @ModelAttribute WishList newWishList, Model model, RedirectAttributes redirectAttributes) {
+    public String createWishList(HttpSession session, @ModelAttribute WishList newWishList, RedirectAttributes redirectAttributes) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/login";
