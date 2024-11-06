@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="da">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Overblik - Ønskebrønden</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <header>
+        <h1>wishlist</h1>
+        <div style="text-align: center">
+            <p th:text="${firstName + ' ' + lastName}" />
+            <p th:text="${email}" style="font-size: 0.8em" />
+        </div>
+        <a href="/logout">
+            <button>Log ud</button>
+        </a>
+    </header>
+
+    <div class="container">
+
+        <h2 th:text="${'Velkommen ' + firstName}" />
+
+        <div th:if="${success}" class="success">
+            <p th:text="${success}"></p>
+        </div>
+    </div>
+
+</body>
+</html>
