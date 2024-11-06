@@ -1,0 +1,77 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9f9f9;
+    padding: 20px;
+    margin: 0;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+}
+
+h1, h2 {
+    font-weight: normal;
+}
+
+form {
+    max-width: 300px;
+    margin: 0 auto 10px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+form div {
+    margin-bottom: 15px;
+}
+
+input, button {
+    padding: 6px;
+    margin-top: 5px;
+    width: 100%;
+}
+
+button {
+    background-color: grey;
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: lightgrey;
+}
+
+.form-container {
+    max-width: 300px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form-container p {
+    margin: 10px 0;
+}
+
+.form-container a button {
+    width: 100%;
+    background-color: grey;
+    color: #fff;
+    padding: 8px;
+    cursor: pointer;
+    border: none;
+}
+
+.form-container a button:hover {
+    background-color: lightgrey;
+}
+
+.danger {
+    color: red;
+}
+
+.success {
+    color: green;
+}

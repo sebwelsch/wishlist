@@ -52,14 +52,12 @@
 
 <h1>Create a Wishlist</h1>
 
-<!-- Updated form action path to /wishlist/create -->
 <form action="/wishlist/create" method="post">
     <label for="wishlistName">Wishlist Name</label>
     <input type="text" id="wishlistName" name="wishlistName" required>
     <button type="submit">Create Wishlist</button>
 </form>
 
-<!-- Display success or error message -->
 <div class="message" th:if="${message}">
     <p th:text="${message}"></p>
 </div>
