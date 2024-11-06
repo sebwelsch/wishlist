@@ -1,6 +1,7 @@
 package keac6.wishlist.service;
 
 import keac6.wishlist.model.User;
+import keac6.wishlist.model.WishList;
 import keac6.wishlist.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -29,6 +30,10 @@ public class WishListService {
 
     public boolean authenticate(String inputPassword, String hashedPassword) {
         return passwordEncoder.matches(inputPassword, hashedPassword);
+    }
+
+    public void createWishList(WishList newWishList) {
+        wishListRepository.createWishList(newWishList);
     }
 }
 

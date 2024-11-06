@@ -2,6 +2,7 @@ package keac6.wishlist.controller;
 
 import jakarta.servlet.http.HttpSession;
 import keac6.wishlist.model.User;
+import keac6.wishlist.model.WishList;
 import keac6.wishlist.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,7 +47,7 @@ public class WishListController {
         if (user != null && wishListService.authenticate(password, user.getPassword())) {
             session.setAttribute("loggedInUser", user);
             redirectAttributes.addFlashAttribute("success", "Du er nu logget ind.");
-            return "redirect:/test";
+            return "redirect:/wishlist";
         }
         model.addAttribute("error", "Email eller password er ikke korrekt. Prøv igen.");
         return "login";
@@ -58,11 +59,25 @@ public class WishListController {
         return "redirect:/login";
     }
 
-    @GetMapping("/test")
-    public String showTestPage(HttpSession session) {
+    @GetMapping("/wishlist")
+    public String showWishListPage(HttpSession session, Model model){
         if (session.getAttribute("loggedInUser") == null) {
             return "redirect:/login";
         }
-        return "test";
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        model.addAttribute("userId", loggedInUser.getUserId());
+        return "wishlist";
+    }
+
+    @PostMapping("/wishlist/create")
+    public String createWishList(HttpSession session, @ModelAttribute WishList newWishList, Model model, RedirectAttributes redirectAttributes) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        newWishList.setUserId(loggedInUser.getUserId());
+        wishListService.createWishList(newWishList);
+        redirectAttributes.addFlashAttribute("message", "Wishlist created");
+        return "redirect:/wishlist";
     }
 }
