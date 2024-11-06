@@ -1,23 +1,35 @@
 package keac6.wishlist.model;
 
 public class WishList {
+    private int wishListId;
+    private int userId;
+    private String wishListName;
 
-    private int wishlistId;
-    private String wishlistName;
-
-    public String getWishlistName() {
-        return wishlistName;
+    public WishList() {
     }
 
-    public void setWishlistName(String wishlistName) {
-        this.wishlistName = wishlistName;
+    public WishList(int userId, String wishListName) {
+        this.userId = userId;
+        this.wishListName = wishListName;
     }
 
-    public int getWishlistId() {
-        return wishlistId;
+    public int getWishListId() {
+        return wishListId;
     }
 
-    public void setWishlistId(int wishlistId) {
-        this.wishlistId = wishlistId;
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public String getWishListName() {
+        return wishListName;
+    }
+
+    public void setWishListName(String wishListName) {
+        this.wishListName = wishListName;
     }
 }
