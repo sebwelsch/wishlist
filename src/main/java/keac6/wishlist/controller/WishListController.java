@@ -91,9 +91,7 @@ public class WishListController {
         }
         newWishList.setUserId(loggedInUser.getUserId());
         wishListService.createWishList(newWishList);
-        redirectAttributes.addFlashAttribute("message", "Wishlist created");
+        redirectAttributes.addFlashAttribute("message", "Ønskeliste oprettet");
         return "redirect:/overview";
     }
-
-
 }
