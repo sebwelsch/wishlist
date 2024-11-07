@@ -3,8 +3,15 @@ package keac6.wishlist.model;
 public class Wish {
     private String name;
     private String description;
-    private Double price;
+    private int price;
     private String link;
+
+    public Wish(String name, String description, int price, String link) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.link = link;
+    }
 
     public String getName(){
 
@@ -16,12 +23,12 @@ public class Wish {
         this.name = name;
     }
 
-    public Double getPrice() {
+    public int getPrice() {
 
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(int price) {
 
         this.price = price;
     }
@@ -45,4 +52,6 @@ public class Wish {
 
         this.link = link;
     }
+
+
 }

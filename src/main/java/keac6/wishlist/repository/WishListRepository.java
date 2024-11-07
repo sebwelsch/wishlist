@@ -55,13 +55,16 @@ public class WishListRepository {
         }
     }
     public void saveNewWish(Wish newWish) {
-        String query = "INSERT INTO wishes (wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?)";
+        String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, newWish.getName());
-            pstmt.setDouble(2, newWish.getPrice());
-            pstmt.setString(3, newWish.getDescription());
-            pstmt.setString(4, newWish.getLink());
+            pstmt.setInt(1, 1);
+            pstmt.setString(2, newWish.getName());
+            pstmt.setInt(3, newWish.getPrice());
+            pstmt.setString(4, newWish.getDescription());
+            pstmt.setString(5, newWish.getLink());
+
+            pstmt.executeUpdate();
 
         }catch (SQLException error) {
             throw new RuntimeException("Error saving new wish", error);

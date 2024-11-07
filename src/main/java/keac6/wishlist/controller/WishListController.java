@@ -96,23 +96,22 @@ public class WishListController {
         return "redirect:/overview";
     }
 
-    @RequestMapping("/wish")
 
+    @PostMapping("/add")
+    public String addWish(@ModelAttribute Wish newWish, RedirectAttributes redirectAttributes ) {
 
-
-        @PostMapping("/add")
-        public String addWish(@ModelAttribute Wish newWish ){
-
-        if(newWish.getName() == null || newWish.getName().isEmpty()){
-                return "Feltet navn skal udfyldes";
-            }
-            wishListService.saveNewWish(newWish);
-            return "Ønske er blevet tilføjet!";
+    if(newWish.getName() == null || newWish.getName().isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Feltet navn skal udfyldes!");
+            return "redirect:/createwish";
         }
+        wishListService.saveNewWish(newWish);
+        redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
+        return "redirect:/createwish";
+    }
 
-        @GetMapping("/createwish")
-        public String showCreateWishPage(){
+    @GetMapping("/createwish")
+    public String showCreateWishPage(){
 
-        return "createWish";
-        }
+    return "addWish";
+    }
 }
