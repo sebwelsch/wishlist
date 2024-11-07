@@ -9,6 +9,7 @@
 name: Java CI with Maven
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
   pull_request:
@@ -27,6 +28,10 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
+      env:
+        DB_URL: ${{secrets.DB_URL}}
+        DB_USERNAME: ${{secrets.DB_USERNAME}}
+        DB_PASSWORD: ${{secrets.DB_PASSWORD}}
       run: mvn -B package --file pom.xml
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
