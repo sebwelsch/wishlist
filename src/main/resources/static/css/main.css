@@ -38,6 +38,8 @@ button {
     background-color: grey;
     color: #fff;
     border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
 
 button:hover {
