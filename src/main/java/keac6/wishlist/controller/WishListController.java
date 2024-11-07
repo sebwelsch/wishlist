@@ -2,6 +2,7 @@ package keac6.wishlist.controller;
 
 import jakarta.servlet.http.HttpSession;
 import keac6.wishlist.model.User;
+import keac6.wishlist.model.Wish;
 import keac6.wishlist.model.WishList;
 import keac6.wishlist.service.WishListService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,4 +94,24 @@ public class WishListController {
         redirectAttributes.addFlashAttribute("message", "Wishlist created");
         return "redirect:/wishlist";
     }
+
+    @RequestMapping("/wish")
+
+
+
+        @PostMapping("/add")
+        public String addWish(@ModelAttribute Wish newWish ){
+
+        if(newWish.getName() == null || newWish.getName().isEmpty()){
+                return "Feltet navn skal udfyldes";
+            }
+            wishListService.saveNewWish(newWish);
+            return "Ønske er blevet tilføjet!";
+        }
+
+        @GetMapping("/createwish")
+        public String showCreateWishPage(){
+
+        return "createWish";
+        }
 }

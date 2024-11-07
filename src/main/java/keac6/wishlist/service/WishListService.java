@@ -1,6 +1,7 @@
 package keac6.wishlist.service;
 
 import keac6.wishlist.model.User;
+import keac6.wishlist.model.Wish;
 import keac6.wishlist.model.WishList;
 import keac6.wishlist.repository.WishListRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,10 @@ public class WishListService {
         String hashedPassword = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(hashedPassword);
         wishListRepository.saveNewUser(newUser);
+    }
+
+    public void saveNewWish(Wish newWish){
+        wishListRepository.saveNewWish(newWish);
     }
 
     public User findByEmail(String email) {

@@ -1,7 +1,9 @@
 package keac6.wishlist.repository;
 
 import keac6.wishlist.model.User;
+import keac6.wishlist.model.Wish;
 import keac6.wishlist.model.WishList;
+import keac6.wishlist.service.WishListService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -49,6 +51,19 @@ public class WishListRepository {
             }
         } catch (SQLException error) {
             throw new RuntimeException("Error saving new user to database", error);
+        }
+    }
+    public void saveNewWish(Wish newWish) {
+        String query = "INSERT INTO wishes (wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?)";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, newWish.getName());
+            pstmt.setDouble(2, newWish.getPrice());
+            pstmt.setString(3, newWish.getDescription());
+            pstmt.setString(4, newWish.getLink());
+
+        }catch (SQLException error) {
+            throw new RuntimeException("Error saving new wish", error);
         }
     }
 
