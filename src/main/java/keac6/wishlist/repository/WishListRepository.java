@@ -7,6 +7,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class WishListRepository {
@@ -78,6 +80,27 @@ public class WishListRepository {
     public void createWishList(WishList newWishList){
         String sql = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
+    }
+
+    public ArrayList<WishList> getWishList(int userid){
+        ArrayList<WishList> list = new ArrayList<>();
+        String query = "SELECT * FROM wishlists WHERE user_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, userid);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()){
+                    WishList wishList = new WishList(
+                            rs.getInt("wishlist_id"),
+                            rs.getString("wishlist_name")
+                    );
+                    list.add(wishList);
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving user from database", error);
+        }
+        return list;
     }
 
 }
