@@ -66,6 +66,7 @@ public class WishListController {
         if (loggedInUser == null) {
             return "redirect:/login";
         }
+        model.addAttribute("wishLists",wishListService.getWishList(loggedInUser.getUserId()));
         model.addAttribute("firstName", loggedInUser.getFirstName());
         model.addAttribute("lastName", loggedInUser.getLastName());
         model.addAttribute("email", loggedInUser.getEmail());
@@ -90,7 +91,7 @@ public class WishListController {
         }
         newWishList.setUserId(loggedInUser.getUserId());
         wishListService.createWishList(newWishList);
-        redirectAttributes.addFlashAttribute("message", "Wishlist created");
-        return "redirect:/wishlist";
+        redirectAttributes.addFlashAttribute("message", "Ønskeliste oprettet");
+        return "redirect:/overview";
     }
 }
