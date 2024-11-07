@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
+  <title>Ønskeliste</title>
+
+
+</head>
+<body >
+<form th:action="@{/add}" method="post">
+  <label for="navn">Navn (påkrævet):</label><br>
+  <input type="text" id="navn" name="name" required><br><br>
+
+  <label for="pris">Pris:</label><br>
+  <input type="number" id="pris" name="price" ><br><br>
+
+  <label for="beskrivelse">Beskrivelse:</label><br>
+  <textarea id="beskrivelse" name="description"></textarea><br><br>
+
+  <label for="link">Link:</label><br>
+  <input type="url" id="link" name="link"><br><br>
+
+  <button type="submit" >Tilføj ønske</button>
+
+  <div th:if="${success} or ${error}">
+    <p th:text="${success}" class="success" />
+    <p th:text="${error}" class="danger" />
+  </div>
+
+</form>
+<div th:if="${error}">
+  <p th:text="${error}">
+
+  </p>
+</div>
+
+
+</body>
+</html>
