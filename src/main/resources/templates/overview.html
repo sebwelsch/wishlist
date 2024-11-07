@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Overblik - Ønskebrønden</title>
+    <title>Overblik</title>
     <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
@@ -24,6 +24,23 @@
 
         <div th:if="${success}" class="success">
             <p th:text="${success}"></p>
+        </div>
+
+        <form th:action="@{/wishlist/create}" method="post">
+            <div>
+                <h3><label for="wishListName">Lav en ny ønskeliste</label></h3>
+                <input type="text" id="wishListName" name="wishListName" placeholder="Navn på ønskeliste" required>
+            </div>
+
+            <div class="message" th:if="${message}">
+                <p th:text="${message}" class="success"></p>
+            </div>
+            
+            <button type="submit">Opret</button>
+        </form>
+
+        <div th:each="wishList: ${wishLists}">
+            <p th:text="${wishList.getWishListName()}"> </p>
         </div>
     </div>
 

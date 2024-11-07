@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 @Service
 public class WishListService {
     private final WishListRepository wishListRepository;
@@ -39,6 +41,10 @@ public class WishListService {
 
     public void createWishList(WishList newWishList) {
         wishListRepository.createWishList(newWishList);
+    }
+
+    public ArrayList<WishList> getWishList(int userid){
+        return wishListRepository.getWishList(userid);
     }
 }
 
