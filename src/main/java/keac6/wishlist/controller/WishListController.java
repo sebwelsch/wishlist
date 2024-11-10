@@ -96,6 +96,11 @@ public class WishListController {
         return "redirect:/overview";
     }
 
+    @GetMapping("/createwish")
+    public String showCreateWishPage(){
+
+        return "addWish";
+    }
 
     @PostMapping("/add")
     public String addWish(@ModelAttribute Wish newWish, RedirectAttributes redirectAttributes ) {
@@ -107,11 +112,5 @@ public class WishListController {
         wishListService.saveNewWish(newWish);
         redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
         return "redirect:/createwish";
-    }
-
-    @GetMapping("/createwish")
-    public String showCreateWishPage(){
-
-    return "addWish";
     }
 }
