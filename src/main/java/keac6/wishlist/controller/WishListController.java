@@ -92,7 +92,17 @@ public class WishListController {
         }
         newWishList.setUserId(loggedInUser.getUserId());
         wishListService.createWishList(newWishList);
-        redirectAttributes.addFlashAttribute("message", "Ønskeliste oprettet");
+        redirectAttributes.addFlashAttribute("success", "Ønskeliste oprettet");
+        return "redirect:/overview";
+    }
+
+    @PostMapping("/wishlist/delete")
+    public String deleteWishList(HttpSession session, RedirectAttributes redirectAttributes) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        redirectAttributes.addFlashAttribute("success", "Ønskeliste slettet");
         return "redirect:/overview";
     }
 
