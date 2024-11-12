@@ -67,7 +67,7 @@ public class WishListController {
         if (loggedInUser == null) {
             return "redirect:/login";
         }
-        model.addAttribute("wishLists",wishListService.getWishList(loggedInUser.getUserId()));
+        model.addAttribute("wishLists", wishListService.getWishList(loggedInUser.getUserId()));
         model.addAttribute("firstName", loggedInUser.getFirstName());
         model.addAttribute("lastName", loggedInUser.getLastName());
         model.addAttribute("email", loggedInUser.getEmail());
@@ -75,7 +75,7 @@ public class WishListController {
     }
 
     @GetMapping("/wishlist")
-    public String showWishListPage(HttpSession session, Model model){
+    public String showWishListPage(HttpSession session, Model model) {
         if (session.getAttribute("loggedInUser") == null) {
             return "redirect:/login";
         }
@@ -96,11 +96,16 @@ public class WishListController {
         return "redirect:/overview";
     }
 
+    @GetMapping("/createwish")
+    public String showCreateWishPage() {
+
+        return "addWish";
+    }
 
     @PostMapping("/add")
-    public String addWish(@ModelAttribute Wish newWish, RedirectAttributes redirectAttributes ) {
+    public String addWish(@ModelAttribute Wish newWish, RedirectAttributes redirectAttributes) {
 
-    if(newWish.getName() == null || newWish.getName().isEmpty()){
+        if (newWish.getName() == null || newWish.getName().isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Feltet navn skal udfyldes!");
             return "redirect:/createwish";
         }
@@ -109,10 +114,16 @@ public class WishListController {
         return "redirect:/createwish";
     }
 
-    @GetMapping("/createwish")
-    public String showCreateWishPage(){
-
-    return "addWish";
+    @GetMapping("/wishlist/{wishListId}")
+    public String showWishList(@PathVariable int wishListId, Model model) {
+        WishList wishList = wishListService.getWishListById(wishListId);
+        if (wishList != null) {
+            model.addAttribute("wishList", wishList);
+            model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
+            return "wishlistDetails";
+        }
+        model.addAttribute("error", "Ønskeliste ikke fundet");
+        return "redirect:/overview";
     }
 
     @GetMapping("/wish/edit/{name}")

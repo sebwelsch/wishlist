@@ -25,7 +25,7 @@ wish_description TEXT,
 wish_price INT NOT NULL,
 wish_url VARCHAR(255),
 reserved BOOLEAN DEFAULT FALSE,
-reserved_by_user_id INT NOT NULL,
+reserved_by_user_id INT DEFAULT NULL,
 FOREIGN KEY (wishlist_id) REFERENCES wishlists(wishlist_id),
 FOREIGN KEY (reserved_by_user_id) REFERENCES users(user_id)
 );
