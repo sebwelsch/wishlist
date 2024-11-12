@@ -8,6 +8,8 @@ body {
 .container {
     max-width: 800px;
     margin: auto;
+    text-align: center;
+    padding: 20px;
 }
 
 h1, h2 {
@@ -16,7 +18,7 @@ h1, h2 {
 
 form {
     max-width: 300px;
-    margin: 0 auto 10px auto;
+    margin: 0 auto;
     padding: 15px;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -35,7 +37,7 @@ input, button, .view-link {
 }
 
 button, .view-link {
-    background-color: grey;
+    background-color: #4b0680;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -44,7 +46,7 @@ button, .view-link {
 }
 
 button:hover, .view-link:hover {
-    background-color: lightgrey;
+    background-color: #4b0680;
 }
 
 .form-container {
@@ -123,4 +125,11 @@ header button:hover {
     font-size: 1.1em;
     color: #333;
     margin: 0 0 10px;
+}
+
+input{
+    padding: 6px;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
 }

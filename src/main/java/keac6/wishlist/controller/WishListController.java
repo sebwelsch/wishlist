@@ -115,8 +115,12 @@ public class WishListController {
     }
 
     @GetMapping("/wishlist/{wishListId}")
-    public String showWishList(@PathVariable int wishListId, Model model) {
+    public String showWishList(@PathVariable int wishListId, Model model, HttpSession session) {
         WishList wishList = wishListService.getWishListById(wishListId);
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser.getUserId() == wishList.getUserId() ) {
+            model.addAttribute("wishListOwner", true);
+        }
         if (wishList != null) {
             model.addAttribute("wishList", wishList);
             model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
