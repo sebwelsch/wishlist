@@ -124,3 +124,17 @@ header button:hover {
     color: #333;
     margin: 0 0 10px;
 }
+
+.wishlist-box form {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.delete-button {
+    background-color: red;
+}
+
+.delete-button:hover {
+    background-color: darkred;
+}

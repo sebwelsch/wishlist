@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Overblik</title>
-    <link rel="stylesheet" th:href="@{/css/main.css?v=5}">
+    <link rel="stylesheet" th:href="@{/css/main.css?v=24}">
 </head>
 <body>
 <header>
@@ -21,8 +21,9 @@
 <div class="container">
     <h2 th:text="${'Velkommen ' + firstName}"/>
 
-    <div th:if="${success}" class="success">
-        <p th:text="${success}"></p>
+    <div th:if="${success} or ${error}">
+        <p th:text="${success}" class="success"/>
+        <p th:text="${error}" class="danger"/>
     </div>
 
     <form th:action="@{/wishlist/create}" method="post">
@@ -30,11 +31,6 @@
             <h3><label for="wishListName">Lav en ny ønskeliste</label></h3>
             <input type="text" id="wishListName" name="wishListName" placeholder="Navn på ønskeliste" required>
         </div>
-
-        <div th:if="${success}">
-            <p th:text="${success}" class="success"/>
-        </div>
-
         <button type="submit">Opret</button>
     </form>
 
@@ -45,7 +41,7 @@
                 <button type="button">Se ønsker</button>
             </a>
             <form th:action="@{/wishlist/delete/{wishListId}(wishListId=${wishlist.wishListId})}" method="post">
-                <button type="submit">Slet</button>
+                <button class="delete-button" type="submit">Slet</button>
             </form>
         </div>
     </div>
