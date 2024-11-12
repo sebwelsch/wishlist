@@ -3,7 +3,6 @@ package keac6.wishlist.repository;
 import keac6.wishlist.model.User;
 import keac6.wishlist.model.Wish;
 import keac6.wishlist.model.WishList;
-import keac6.wishlist.service.WishListService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -54,6 +53,7 @@ public class WishListRepository {
             throw new RuntimeException("Error saving new user to database", error);
         }
     }
+
     public void saveNewWish(Wish newWish) {
         String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
@@ -66,7 +66,7 @@ public class WishListRepository {
 
             pstmt.executeUpdate();
 
-        }catch (SQLException error) {
+        } catch (SQLException error) {
             throw new RuntimeException("Error saving new wish", error);
         }
     }
@@ -94,12 +94,12 @@ public class WishListRepository {
         }
     }
 
-    public void createWishList(WishList newWishList){
+    public void createWishList(WishList newWishList) {
         String sql = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
     }
 
-    public ArrayList<WishList> getWishList(int userid){
+    public ArrayList<WishList> getWishList(int userid) {
         ArrayList<WishList> list = new ArrayList<>();
         String query = "SELECT * FROM wishlists WHERE user_id = ?";
         try (Connection connection = getDBConnection()) {
@@ -107,17 +107,58 @@ public class WishListRepository {
             pstmt.setInt(1, userid);
             ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()){
-                    WishList wishList = new WishList(
-                            rs.getInt("wishlist_id"),
-                            rs.getString("wishlist_name")
-                    );
-                    list.add(wishList);
+            while (rs.next()) {
+                WishList wishList = new WishList(
+                        rs.getInt("wishlist_id"),
+                        rs.getString("wishlist_name")
+                );
+                list.add(wishList);
             }
         } catch (SQLException error) {
             throw new RuntimeException("Error retrieving user from database", error);
         }
         return list;
+    }
+
+    public WishList getWishListById(int wishListId) {
+        String query = "SELECT * FROM wishlists WHERE wishlist_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishListId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return new WishList(
+                        rs.getInt("wishlist_id"),
+                        rs.getString("wishlist_name")
+                );
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving wish list from database", error);
+        }
+        return null;
+    }
+
+    public ArrayList<Wish> getWishesByWishListId(int wishListId) {
+        ArrayList<Wish> wishes = new ArrayList<>();
+        String query = "SELECT * FROM wishes WHERE wishlist_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishListId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                wishes.add(new Wish(
+                        rs.getString("wish_name"),
+                        rs.getString("wish_description"),
+                        rs.getInt("wish_price"),
+                        rs.getString("wish_url")
+                ));
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving wishes from database", error);
+        }
+        return wishes;
     }
 
 }
