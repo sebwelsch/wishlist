@@ -113,4 +113,18 @@ public class WishListController {
         redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
         return "redirect:/createwish";
     }
+
+    @GetMapping("/wishlist/{wishListId}")
+    public String showWishList(@PathVariable int wishListId, Model model) {
+        WishList wishList = wishListService.getWishListById(wishListId);
+        if (wishList != null) {
+            model.addAttribute("wishList", wishList);
+            model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
+            return "wishlistDetails";
+        }
+        model.addAttribute("error", "Ønskeliste ikke fundet");
+        return "redirect:/overview";
+    }
+
+
 }

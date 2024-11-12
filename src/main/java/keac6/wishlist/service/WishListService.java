@@ -46,5 +46,13 @@ public class WishListService {
     public ArrayList<WishList> getWishList(int userid){
         return wishListRepository.getWishList(userid);
     }
+
+    public WishList getWishListById(int wishListId) {
+        return wishListRepository.getWishListById(wishListId);
+    }
+
+    public ArrayList<Wish> getWishesByWishListId(int wishListId) {
+        return wishListRepository.getWishesByWishListId(wishListId);
+    }
 }
 

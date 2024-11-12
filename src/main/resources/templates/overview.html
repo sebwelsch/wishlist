@@ -40,7 +40,13 @@
         </form>
 
         <div th:each="wishList: ${wishLists}">
-            <p th:text="${wishList.getWishListName()}"> </p>
+            <ul>
+                <th:block th:each="wishList : ${wishLists}">
+                    <li>
+                        <a th:href="@{/wishlist/{wishListId}(wishListId=${wishList.wishListId})}" th:text="${wishList.wishListName}"></a>
+                    </li>
+                </th:block>
+            </ul>
         </div>
     </div>
 
