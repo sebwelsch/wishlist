@@ -7,7 +7,7 @@ user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 email varchar(255) NOT NULL,
 password varchar(255) NOT NULL,
 first_name varchar(255) NOT NULL,
-last_name varchar(255)
+last_name varchar(255) DEFAULT NULL
 );
 
 CREATE TABLE IF NOT EXISTS wishlists (
@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS wishes (
 wish_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 wishlist_id INT NOT NULL,
 wish_name varchar(255) NOT NULL,
-wish_description TEXT,
+wish_description TEXT DEFAULT NULL,
 wish_price INT NOT NULL,
-wish_url VARCHAR(255),
+wish_url VARCHAR(255) DEFAULT NULL,
 reserved BOOLEAN DEFAULT FALSE,
 reserved_by_user_id INT DEFAULT NULL,
 FOREIGN KEY (wishlist_id) REFERENCES wishlists(wishlist_id),
