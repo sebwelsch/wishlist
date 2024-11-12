@@ -140,22 +140,26 @@ public class WishListController {
     }
 
     @PostMapping("/wish/update")
-    public String updateWish(@ModelAttribute Wish updatedWish, RedirectAttributes redirectAttributes) {
-/*
+    public String updateWish(@ModelAttribute Wish updatedWish, RedirectAttributes redirectAttributes, Model model) {
 
-        Wish existingWish = wishListService.findWishById(;int wish_id;)
+        Wish existingWish = wishListService.findWishById(updatedWish.getId());
 
         if (existingWish == null) {
             redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
             return "redirect:/overview";
         }
-*/
+
 
         wishListService.updateWish(updatedWish);
+
+
+
+        model.addAttribute("wish", updatedWish);
 
         redirectAttributes.addFlashAttribute("success", "Ønsket blev opdateret!");
         return "redirect:/overview";
     }
+
 
 
 }

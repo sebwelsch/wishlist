@@ -192,12 +192,12 @@ public class WishListRepository {
     public void updateWish(Wish updatedWish){
         String querey = "UPDATE wishes SET wish_name = ?, wish_price = ?, wish_description = ?, wish_url = ? WHERE wish_id = ? ";
         try(Connection connection = getDBConnection()){
-            PreparedStatement pstmt =  connection.prepareStatement(querey);
-            pstmt.setString(1, updatedWish.getName());
+            PreparedStatement pstmt =  connection.prepareStatement(querey, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, "Longboard");
             pstmt.setInt(2, updatedWish.getPrice());
             pstmt.setString(3, updatedWish.getDescription());
             pstmt.setString(4, updatedWish.getLink());
-            pstmt.setInt(5,updatedWish.getId());
+            pstmt.setInt(5,1);
 
             pstmt.executeUpdate();
         }catch (SQLException error) {
