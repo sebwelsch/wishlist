@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -118,6 +119,43 @@ public class WishListRepository {
             throw new RuntimeException("Error retrieving user from database", error);
         }
         return list;
+    }
+
+    public Wish findWishByName(String name){
+        String query = "SELECT * FROM wishes WHERE wish_name = ?";
+        try(Connection connection = getDBConnection()){
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setString(1, name);
+            ResultSet rs = pstmt.executeQuery();
+
+            if(rs.next()){
+                return new Wish(
+                        rs.getString("wish_name"),
+                        rs.getString("wish_description"),
+                        rs.getInt("wish_price"),
+                        rs.getString("wish_url")
+                );
+            }
+        }catch (SQLException error) {
+            throw new RuntimeException("Error retrieving user from database", error);
+        }
+        return null;
+    }
+
+    public void updateWish(Wish updatedWish, String oldWishName){
+        String querey = "UPDATE wishlists SET wish_name = ?, wish_price = ?, wish_description = ?, wish_url = ? wish_price = ?";
+        try(Connection connection = getDBConnection()){
+            PreparedStatement pstmt =  connection.prepareStatement(querey);
+            pstmt.setString(1, updatedWish.getName());
+            pstmt.setInt(2, updatedWish.getPrice());
+            pstmt.setString(3, updatedWish.getDescription());
+            pstmt.setString(4, updatedWish.getLink());
+            pstmt.setString(5, oldWishName);
+
+            pstmt.executeUpdate();
+        }catch (SQLException error) {
+            throw new RuntimeException("Error updating wish", error);
+        }
     }
 
 }

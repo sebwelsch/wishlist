@@ -46,5 +46,14 @@ public class WishListService {
     public ArrayList<WishList> getWishList(int userid){
         return wishListRepository.getWishList(userid);
     }
+
+
+    public Wish findWishByName(String name){
+        return wishListRepository.findWishByName(name);
+    }
+
+    public void updateWish(Wish updatedWish, String oldWishName){
+        wishListRepository.updateWish(updatedWish, oldWishName);
+    }
 }
 

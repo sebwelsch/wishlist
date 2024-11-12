@@ -114,4 +114,35 @@ public class WishListController {
 
     return "addWish";
     }
+
+    @GetMapping("/wish/edit/{name}")
+    public String showWishEditPage(@PathVariable String name, Model model) {
+       Wish existingWish = wishListService.findWishByName(name);
+
+       if (existingWish == null) {
+           model.addAttribute("error", "Ønsket blev ikke fundet!");
+           return "redirect:/overview";
+       }
+
+       model.addAttribute("wish", existingWish);
+       return "editWish";
+    }
+
+    @PostMapping("/wish/update")
+    public String updateWish(@ModelAttribute Wish updatedWish, @RequestParam String oldWishName, RedirectAttributes redirectAttributes) {
+
+        Wish existingWish = wishListService.findWishByName(oldWishName);
+
+        if (existingWish == null) {
+            redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
+            return "redirect:/overview";
+        }
+
+        wishListService.updateWish(updatedWish, oldWishName);
+
+        redirectAttributes.addFlashAttribute("success", "Ønsket blev opdateret!");
+        return "redirect:/overview";
+    }
+
+
 }
