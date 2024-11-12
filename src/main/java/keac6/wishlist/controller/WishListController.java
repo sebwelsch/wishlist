@@ -160,6 +160,24 @@ public class WishListController {
         return "redirect:/overview";
     }
 
+    @PostMapping("/wish/reserve/{wishId}")
+    public String reserveWish(@PathVariable int wishId, RedirectAttributes redirectAttributes, Model model) {
 
+        Wish existingWish = wishListService.findWishById(wishId);
 
+        if (existingWish == null) {
+            redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
+            return "redirect:/overview";
+        }
+
+        if (existingWish.isReserved()) {
+            redirectAttributes.addFlashAttribute("error", "Ønsket er allerede reserveret");
+            return "redirect:/overview";
+        }
+
+        wishListService.reserveWish(wishId);
+
+        redirectAttributes.addFlashAttribute("success", "Ønsket er blevet reserveret");
+        return "redirect:/overview";
+    }
 }

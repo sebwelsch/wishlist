@@ -158,7 +158,8 @@ public class WishListRepository {
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
-                        rs.getString("wish_url")
+                        rs.getString("wish_url"),
+                        rs.getBoolean("reserved")
                 ));
             }
         } catch (SQLException error) {
@@ -180,7 +181,8 @@ public class WishListRepository {
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
-                        rs.getString("wish_url")
+                        rs.getString("wish_url"),
+                        rs.getBoolean("reserved")
                 );
             }
         }catch (SQLException error) {
@@ -193,7 +195,7 @@ public class WishListRepository {
         String querey = "UPDATE wishes SET wish_name = ?, wish_price = ?, wish_description = ?, wish_url = ? WHERE wish_id = ? ";
         try(Connection connection = getDBConnection()){
             PreparedStatement pstmt =  connection.prepareStatement(querey, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setString(1, "Longboard");
+            pstmt.setString(1, updatedWish.getName());
             pstmt.setInt(2, updatedWish.getPrice());
             pstmt.setString(3, updatedWish.getDescription());
             pstmt.setString(4, updatedWish.getLink());
@@ -201,6 +203,19 @@ public class WishListRepository {
 
             pstmt.executeUpdate();
         }catch (SQLException error) {
+            throw new RuntimeException("Error updating wish", error);
+        }
+    }
+
+    public void reserveWish(int wishId){
+        String query = "UPDATE wishes SET wish_id = ? WHERE wish_id = ?";
+        try(Connection connection = getDBConnection()){
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setBoolean(1, true);
+            pstmt.setInt(2, wishId);
+
+            pstmt.executeUpdate();
+        }catch(SQLException error){
             throw new RuntimeException("Error updating wish", error);
         }
     }

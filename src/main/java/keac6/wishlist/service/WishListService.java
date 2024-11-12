@@ -63,5 +63,10 @@ public class WishListService {
     public void updateWish(Wish updatedWish){
         wishListRepository.updateWish(updatedWish);
     }
+
+
+    public void reserveWish(int wishId) {
+
+    }
 }
 

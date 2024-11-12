@@ -6,17 +6,27 @@ public class Wish {
     private String description;
     private int price;
     private String link;
+    private boolean reserved;
 
 
     public Wish(){}
 
-    public Wish(int id, String name, String description, int price, String link) {
+    public Wish(int id, String name, String description, int price, String link, boolean reserved) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.link = link;
+        this.reserved = reserved;
     }
+
+    public boolean isReserved() {
+        return reserved;
+    }
+    public void setReserved(boolean reserved) {
+        this.reserved = reserved;
+    }
+
     public int getId() {
         return id;
     }
