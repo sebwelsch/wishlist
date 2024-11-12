@@ -53,6 +53,7 @@ public class WishListRepository {
             throw new RuntimeException("Error saving new user to database", error);
         }
     }
+
     public void saveNewWish(Wish newWish) {
         String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
@@ -65,7 +66,7 @@ public class WishListRepository {
 
             pstmt.executeUpdate();
 
-        }catch (SQLException error) {
+        } catch (SQLException error) {
             throw new RuntimeException("Error saving new wish", error);
         }
     }
@@ -93,12 +94,12 @@ public class WishListRepository {
         }
     }
 
-    public void createWishList(WishList newWishList){
+    public void createWishList(WishList newWishList) {
         String sql = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
     }
 
-    public ArrayList<WishList> getWishList(int userid){
+    public ArrayList<WishList> getWishList(int userid) {
         ArrayList<WishList> list = new ArrayList<>();
         String query = "SELECT * FROM wishlists WHERE user_id = ?";
         try (Connection connection = getDBConnection()) {
@@ -106,12 +107,12 @@ public class WishListRepository {
             pstmt.setInt(1, userid);
             ResultSet rs = pstmt.executeQuery();
 
-            while (rs.next()){
-                    WishList wishList = new WishList(
-                            rs.getInt("wishlist_id"),
-                            rs.getString("wishlist_name")
-                    );
-                    list.add(wishList);
+            while (rs.next()) {
+                WishList wishList = new WishList(
+                        rs.getInt("wishlist_id"),
+                        rs.getString("wishlist_name")
+                );
+                list.add(wishList);
             }
         } catch (SQLException error) {
             throw new RuntimeException("Error retrieving user from database", error);

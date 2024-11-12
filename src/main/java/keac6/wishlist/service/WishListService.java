@@ -27,7 +27,7 @@ public class WishListService {
         wishListRepository.saveNewUser(newUser);
     }
 
-    public void saveNewWish(Wish newWish){
+    public void saveNewWish(Wish newWish) {
         wishListRepository.saveNewWish(newWish);
     }
 
@@ -43,7 +43,7 @@ public class WishListService {
         wishListRepository.createWishList(newWishList);
     }
 
-    public ArrayList<WishList> getWishList(int userid){
+    public ArrayList<WishList> getWishList(int userid) {
         return wishListRepository.getWishList(userid);
     }
 
