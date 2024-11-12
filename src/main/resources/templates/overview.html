@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Overblik</title>
-    <link rel="stylesheet" th:href="@{/css/main.css?v=2}">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 <header>
@@ -21,8 +21,9 @@
 <div class="container">
     <h2 th:text="${'Velkommen ' + firstName}"/>
 
-    <div th:if="${success}" class="success">
-        <p th:text="${success}"></p>
+    <div th:if="${success} or ${error}">
+        <p th:text="${success}" class="success"/>
+        <p th:text="${error}" class="danger"/>
     </div>
 
     <form th:action="@{/wishlist/create}" method="post">
@@ -30,18 +31,18 @@
             <h3><label for="wishListName">Lav en ny ønskeliste</label></h3>
             <input type="text" id="wishListName" name="wishListName" placeholder="Navn på ønskeliste" required>
         </div>
-
-        <div class="message" th:if="${message}">
-            <p th:text="${message}" class="success"></p>
-        </div>
-
         <button type="submit">Opret</button>
     </form>
 
     <div class="wishlist-container">
         <div class="wishlist-box" th:each="wishlist: ${wishLists}">
             <h3 th:text="${wishlist.wishListName}"></h3>
-            <a th:href="@{/wishlist/{id}(id=${wishlist.wishListId})}" class="view-link">Se ønsker</a>
+            <a th:href="@{/wishlist/{id}(id=${wishlist.wishListId})}">
+                <button type="button">Se ønsker</button>
+            </a>
+            <form th:action="@{/wishlist/delete/{wishListId}(wishListId=${wishlist.wishListId})}" method="post">
+                <button class="delete-button" type="submit">Slet</button>
+            </form>
         </div>
     </div>
 
