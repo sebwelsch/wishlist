@@ -47,17 +47,17 @@ button:hover, .view-link:hover {
     background-color: lightgrey;
 }
 
-.form-container {
+.form-info {
     max-width: 300px;
     margin: 0 auto;
     text-align: center;
 }
 
-.form-container p {
+.form-info p {
     margin: 10px 0;
 }
 
-.form-container a button {
+.form-info a button {
     width: 100%;
     background-color: grey;
     color: #fff;
@@ -65,7 +65,7 @@ button:hover, .view-link:hover {
     border: none;
 }
 
-.form-container a button:hover {
+.form-info a button:hover {
     background-color: lightgrey;
 }
 

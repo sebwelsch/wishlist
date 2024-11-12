@@ -54,5 +54,9 @@ public class WishListService {
     public ArrayList<Wish> getWishesByWishListId(int wishListId) {
         return wishListRepository.getWishesByWishListId(wishListId);
     }
+
+    public void deleteWishList(int wishListId) {
+        wishListRepository.deleteWishList(wishListId);
+    }
 }
 
