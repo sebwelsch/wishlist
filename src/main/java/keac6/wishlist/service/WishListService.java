@@ -56,12 +56,12 @@ public class WishListService {
     }
 
 
-    public Wish findWishByName(String name){
-        return wishListRepository.findWishByName(name);
+    public Wish findWishById(int wish_id){
+        return wishListRepository.findWishById(wish_id);
     }
 
-    public void updateWish(Wish updatedWish, String oldWishName){
-        wishListRepository.updateWish(updatedWish, oldWishName);
+    public void updateWish(Wish updatedWish){
+        wishListRepository.updateWish(updatedWish);
     }
 }
 

@@ -65,6 +65,11 @@ public class WishListRepository {
             pstmt.setString(5, newWish.getLink());
 
             pstmt.executeUpdate();
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    newWish.setId(generatedKeys.getInt(1));
+                }
+            }
 
         } catch (SQLException error) {
             throw new RuntimeException("Error saving new wish", error);
@@ -149,6 +154,7 @@ public class WishListRepository {
 
             while (rs.next()) {
                 wishes.add(new Wish(
+                        rs.getInt("wish_id"),
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
@@ -161,15 +167,16 @@ public class WishListRepository {
         return wishes;
     }
 
-    public Wish findWishByName(String name){
-        String query = "SELECT * FROM wishes WHERE wish_name = ?";
+    public Wish findWishById(int wish_Id){
+        String query = "SELECT * FROM wishes WHERE wish_id = ?";
         try(Connection connection = getDBConnection()){
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setString(1, name);
+            pstmt.setInt(1, wish_Id);
             ResultSet rs = pstmt.executeQuery();
 
             if(rs.next()){
                 return new Wish(
+                        rs.getInt("wish_id"),
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
@@ -182,15 +189,15 @@ public class WishListRepository {
         return null;
     }
 
-    public void updateWish(Wish updatedWish, String oldWishName){
-        String querey = "UPDATE wishlists SET wish_name = ?, wish_price = ?, wish_description = ?, wish_url = ? wish_price = ?";
+    public void updateWish(Wish updatedWish){
+        String querey = "UPDATE wishes SET wish_name = ?, wish_price = ?, wish_description = ?, wish_url = ? WHERE wish_id = ? ";
         try(Connection connection = getDBConnection()){
             PreparedStatement pstmt =  connection.prepareStatement(querey);
             pstmt.setString(1, updatedWish.getName());
             pstmt.setInt(2, updatedWish.getPrice());
             pstmt.setString(3, updatedWish.getDescription());
             pstmt.setString(4, updatedWish.getLink());
-            pstmt.setString(5, oldWishName);
+            pstmt.setInt(5,updatedWish.getId());
 
             pstmt.executeUpdate();
         }catch (SQLException error) {

@@ -11,7 +11,7 @@
 <div class="container">
     <h2>Rediger Ønske</h2>
 
-    <form th:action="@{/wish/update}" method="post">
+    <form th:action="@{/wish/update}" method="post" th:object="${wish}">
         <!-- Send det oprindelige navn af ønsket som skjult input -->
         <input type="hidden" name="oldWishName" th:value="${wish.name}" />
 
@@ -21,18 +21,18 @@
         </div>
 
         <div class="form-group">
-            <label for="description">Beskrivelse:</label>
-            <input type="text" id="description" name="description" th:value="${wish.description}" required />
+        <label for="price">Pris:</label>
+        <input type="number" id="price" name="price" th:value="${wish.price}" required />
         </div>
 
         <div class="form-group">
-            <label for="price">Pris:</label>
-            <input type="number" id="price" name="price" th:value="${wish.price}" required />
+            <label for="description">Beskrivelse:</label>
+            <input type="text" id="description" name="description" th:value="${wish.description}"/>
         </div>
 
         <div class="form-group">
             <label for="link">Link:</label>
-            <input type="url" id="link" name="link" th:value="${wish.link}" required />
+            <input type="url" id="link" name="link" th:value="${wish.link}"/>
         </div>
 
         <div th:if="${success} or ${error}">

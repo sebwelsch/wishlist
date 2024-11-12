@@ -1,16 +1,28 @@
 package keac6.wishlist.model;
 
 public class Wish {
+    private int id;
     private String name;
     private String description;
     private int price;
     private String link;
 
-    public Wish(String name, String description, int price, String link) {
+
+    public Wish(){}
+
+    public Wish(int id, String name, String description, int price, String link) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.link = link;
+    }
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
