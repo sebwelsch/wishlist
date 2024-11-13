@@ -61,6 +61,7 @@
 </head>
 <body>
 <h1 th:text="${wishList.wishListName}"></h1>
+<h2 style="text-align: center"> <a th:href="@{'/wishlist/' + ${wishList.wishListId}}" th:text="'Højre klick på dette link for at dele din ønskeliste med andre :)'" id="share-link"></a></h2>
 <div class="wish-list">
     <th:block th:each="wish : ${wishes}">
         <div class="wish-item">
