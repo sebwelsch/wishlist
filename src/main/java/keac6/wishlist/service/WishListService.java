@@ -31,8 +31,11 @@ public class WishListService {
         wishListRepository.saveNewWish(newWish);
     }
 
-    public User findByEmail(String email) {
-        return wishListRepository.findByEmail(email);
+    public User getUserByEmail(String email) {
+        return wishListRepository.getUserByEmail(email);
+    }
+    public User getUserById(int id) {
+        return wishListRepository.getUserById(id);
     }
 
     public boolean authenticate(String inputPassword, String hashedPassword) {
@@ -43,8 +46,8 @@ public class WishListService {
         wishListRepository.createWishList(newWishList);
     }
 
-    public ArrayList<WishList> getWishList(int userid) {
-        return wishListRepository.getWishList(userid);
+    public ArrayList<WishList> getAllWishLists(int userid) {
+        return wishListRepository.getAllWishLists(userid);
     }
 
     public WishList getWishListById(int wishListId) {

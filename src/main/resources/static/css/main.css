@@ -9,7 +9,6 @@ body {
     max-width: 800px;
     margin: auto;
     text-align: center;
-    padding: 20px;
 }
 
 h1, h2 {
@@ -30,6 +29,10 @@ form div {
     margin-bottom: 15px;
 }
 
+input {
+    box-sizing: border-box;
+}
+
 input, button, .view-link {
     padding: 6px;
     margin-top: 5px;
@@ -37,7 +40,7 @@ input, button, .view-link {
 }
 
 button, .view-link {
-    background-color: #4b0680;
+    background-color: #880be3;
     color: #fff;
     border: none;
     cursor: pointer;
@@ -61,14 +64,14 @@ button:hover, .view-link:hover {
 
 .form-container a button {
     width: 100%;
-    background-color: grey;
+    background-color: #880be3;
     color: #fff;
     padding: 8px;
     border: none;
 }
 
 .form-container a button:hover {
-    background-color: lightgrey;
+    background-color: #4b0680;
 }
 
 .danger {
@@ -86,8 +89,10 @@ header {
     align-items: center;
 }
 
-header h1, p {
+header h1, header p, header a {
     margin: 0;
+    text-decoration: none;
+    color: #333;
 }
 
 header button {
@@ -125,11 +130,4 @@ header button:hover {
     font-size: 1.1em;
     color: #333;
     margin: 0 0 10px;
-}
-
-input{
-    padding: 6px;
-    margin: 0;
-    width: 100%;
-    box-sizing: border-box;
 }
