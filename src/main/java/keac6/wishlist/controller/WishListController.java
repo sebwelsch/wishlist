@@ -1,5 +1,6 @@
 package keac6.wishlist.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import keac6.wishlist.model.User;
 import keac6.wishlist.model.Wish;
@@ -28,7 +29,7 @@ public class WishListController {
 
     @PostMapping("/signup")
     public String saveNewUser(@ModelAttribute User newUser, Model model, RedirectAttributes redirectAttributes) {
-        if (wishListService.findByEmail(newUser.getEmail()) != null) {
+        if (wishListService.getUserByEmail(newUser.getEmail()) != null) {
             model.addAttribute("error", "Denne email er allerede registreret.");
             return "signUp";
         }
@@ -45,7 +46,7 @@ public class WishListController {
 
     @PostMapping("/login")
     public String verifyLogin(HttpSession session, @RequestParam String email, @RequestParam String password, Model model, RedirectAttributes redirectAttributes) {
-        User user = wishListService.findByEmail(email);
+        User user = wishListService.getUserByEmail(email);
         if (user != null && wishListService.authenticate(password, user.getPassword())) {
             session.setAttribute("loggedInUser", user);
             redirectAttributes.addFlashAttribute("success", "Du er nu logget ind.");
@@ -67,21 +68,9 @@ public class WishListController {
         if (loggedInUser == null) {
             return "redirect:/login";
         }
-        model.addAttribute("wishLists", wishListService.getWishList(loggedInUser.getUserId()));
-        model.addAttribute("firstName", loggedInUser.getFirstName());
-        model.addAttribute("lastName", loggedInUser.getLastName());
-        model.addAttribute("email", loggedInUser.getEmail());
+        model.addAttribute("loggedInUser", loggedInUser);
+        model.addAttribute("wishLists", wishListService.getAllWishLists(loggedInUser.getUserId()));
         return "overview";
-    }
-
-    @GetMapping("/wishlist")
-    public String showWishListPage(HttpSession session, Model model) {
-        if (session.getAttribute("loggedInUser") == null) {
-            return "redirect:/login";
-        }
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        model.addAttribute("userId", loggedInUser.getUserId());
-        return "wishlist";
     }
 
     @PostMapping("/wishlist/create")
@@ -126,16 +115,21 @@ public class WishListController {
     }
 
     @GetMapping("/wishlist/{wishListId}")
-    public String showWishList(@PathVariable int wishListId, Model model) {
+    public String showWishListPage(@PathVariable int wishListId, Model model, HttpSession session, HttpServletRequest request) {
         WishList wishList = wishListService.getWishListById(wishListId);
-        if (wishList != null) {
-            model.addAttribute("wishList", wishList);
-            model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
-            return "wishlistDetails";
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        User wishListOwner = wishListService.getUserById(wishList.getUserId());
+        if ((loggedInUser != null) && (loggedInUser.getUserId() == wishList.getUserId())) {
+            model.addAttribute("wishListOwner", true);
         }
-        model.addAttribute("error", "Ønskeliste ikke fundet");
-        return "redirect:/overview";
+
+            model.addAttribute("loggedInUser", loggedInUser);
+
+        String currentUrl = request.getRequestURL().toString();
+        model.addAttribute("currentUrl", currentUrl);
+        model.addAttribute("wishList", wishList);
+        model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
+        model.addAttribute("wishListOwner", wishListOwner);
+        return "wishList";
     }
-
-
 }

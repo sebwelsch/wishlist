@@ -71,11 +71,34 @@ public class WishListRepository {
         }
     }
 
-    public User findByEmail(String email) {
+    public User getUserByEmail(String email) {
         String query = "SELECT * FROM users WHERE email = ?";
         try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setString(1, email);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                User user = new User();
+                user.setUserId(rs.getInt("user_id"));
+                user.setEmail(rs.getString("email"));
+                user.setPassword(rs.getString("password"));
+                user.setFirstName(rs.getString("first_name"));
+                user.setLastName(rs.getString("last_name"));
+                return user;
+            } else {
+                return null;
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving user from database", error);
+        }
+    }
+
+    public User getUserById(int id) {
+        String query = "SELECT * FROM users WHERE user_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
@@ -99,7 +122,7 @@ public class WishListRepository {
         jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
     }
 
-    public ArrayList<WishList> getWishList(int userid) {
+    public ArrayList<WishList> getAllWishLists(int userid) {
         ArrayList<WishList> list = new ArrayList<>();
         String query = "SELECT * FROM wishlists WHERE user_id = ?";
         try (Connection connection = getDBConnection()) {
@@ -110,6 +133,7 @@ public class WishListRepository {
             while (rs.next()) {
                 WishList wishList = new WishList(
                         rs.getInt("wishlist_id"),
+                        rs.getInt("user_id"),
                         rs.getString("wishlist_name")
                 );
                 list.add(wishList);
@@ -130,6 +154,7 @@ public class WishListRepository {
             if (rs.next()) {
                 return new WishList(
                         rs.getInt("wishlist_id"),
+                        rs.getInt("user_id"),
                         rs.getString("wishlist_name")
                 );
             }

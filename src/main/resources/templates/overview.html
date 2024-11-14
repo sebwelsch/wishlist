@@ -8,18 +8,17 @@
 </head>
 <body>
 <header>
-    <h1>wishlist</h1>
+    <a th:href="@{'/overview'}"><h1>wishlist</h1></a>
     <div style="text-align: center">
-        <p th:text="${firstName + ' ' + lastName}"/>
-        <p th:text="${email}" style="font-size: 0.8em"/>
+        <p th:text="${loggedInUser.getFirstName() + ' ' + loggedInUser.getLastName()}"/>
+        <p th:text="${loggedInUser.getEmail()}" style="font-size: 0.8em"/>
     </div>
     <a href="/logout">
         <button>Log ud</button>
     </a>
 </header>
-
 <div class="container">
-    <h2 th:text="${'Velkommen ' + firstName}"/>
+    <h2 th:text="${'Velkommen ' + loggedInUser.getFirstName()}"/>
 
     <div th:if="${success} or ${error}">
         <p th:text="${success}" class="success"/>
@@ -31,6 +30,7 @@
             <h3><label for="wishListName">Lav en ny ønskeliste</label></h3>
             <input type="text" id="wishListName" name="wishListName" placeholder="Navn på ønskeliste" required>
         </div>
+
         <button type="submit">Opret</button>
     </form>
 
