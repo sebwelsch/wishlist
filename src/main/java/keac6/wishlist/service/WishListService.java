@@ -34,6 +34,7 @@ public class WishListService {
     public User getUserByEmail(String email) {
         return wishListRepository.getUserByEmail(email);
     }
+
     public User getUserById(int id) {
         return wishListRepository.getUserById(id);
     }
@@ -62,13 +63,16 @@ public class WishListService {
         wishListRepository.deleteWishList(wishListId);
     }
 
+    public void deleteWish(int wishId) {
+        wishListRepository.deleteWish(wishId);
+    }
 
-    public Wish findWishById(int wish_id){
+    public Wish findWishById(int wish_id) {
         return wishListRepository.findWishById(wish_id);
     }
 
-    public void reserveWish(int wishId) {
-
+    public void reserveWish(boolean reserved, int reservedByUserId, int wishId) {
+        wishListRepository.reserveWish(reserved, reservedByUserId, wishId);
     }
 }
 

@@ -18,7 +18,7 @@
     </a>
 </header>
 <div class="container">
-    <h2 th:text="${'Velkommen ' + loggedInUser.getFirstName()}"/>
+    <h2 th:text="${'Velkommen ' + loggedInUser.getFirstName()}"></h2>
 
     <div th:if="${success} or ${error}">
         <p th:text="${success}" class="success"/>

@@ -58,16 +58,19 @@ public class WishListRepository {
         String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, 1);
+            pstmt.setInt(1, newWish.getWishListId());
             pstmt.setString(2, newWish.getName());
             pstmt.setInt(3, newWish.getPrice());
             pstmt.setString(4, newWish.getDescription());
             pstmt.setString(5, newWish.getLink());
 
             pstmt.executeUpdate();
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    newWish.setId(generatedKeys.getInt(1));
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        newWish.setId(generatedKeys.getInt(1));
+                    }
                 }
             }
 
@@ -180,11 +183,13 @@ public class WishListRepository {
             while (rs.next()) {
                 wishes.add(new Wish(
                         rs.getInt("wish_id"),
+                        rs.getInt("wishlist_id"),
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
                         rs.getString("wish_url"),
-                        rs.getBoolean("reserved")
+                        rs.getBoolean("reserved"),
+                        rs.getInt("reserved_by_user_id")
                 ));
             }
         } catch (SQLException error) {
@@ -204,40 +209,55 @@ public class WishListRepository {
             throw new RuntimeException("Error deleting wishlist", error);
         }
     }
-    public Wish findWishById(int wish_Id){
+
+    public void deleteWish(int wishId) {
+        String query = "DELETE FROM wishes WHERE wish_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException error) {
+            throw new RuntimeException("Error deleting wish", error);
+        }
+    }
+
+    public Wish findWishById(int wish_Id) {
         String query = "SELECT * FROM wishes WHERE wish_id = ?";
-        try(Connection connection = getDBConnection()){
+        try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query);
             pstmt.setInt(1, wish_Id);
             ResultSet rs = pstmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 return new Wish(
                         rs.getInt("wish_id"),
+                        rs.getInt("wishlist_id"),
                         rs.getString("wish_name"),
                         rs.getString("wish_description"),
                         rs.getInt("wish_price"),
                         rs.getString("wish_url"),
-                        rs.getBoolean("reserved")
+                        rs.getBoolean("reserved"),
+                        rs.getInt("reserved_by_user_id")
                 );
             }
-        }catch (SQLException error) {
+        } catch (SQLException error) {
             throw new RuntimeException("Error retrieving user from database", error);
         }
         return null;
     }
 
-    public void reserveWish(int wishId){
-        String query = "UPDATE wishes SET wish_id = ? WHERE wish_id = ?";
-        try(Connection connection = getDBConnection()){
+    public void reserveWish(boolean reserved, int reservedByUserId, int wishId) {
+        String query = "UPDATE wishes SET reserved = ?, reserved_by_user_id = ? WHERE wish_id = ?";
+        try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setBoolean(1, true);
-            pstmt.setInt(2, wishId);
+            pstmt.setBoolean(1, reserved);
+            pstmt.setInt(2, reservedByUserId);
+            pstmt.setInt(3, wishId);
 
             pstmt.executeUpdate();
-        }catch(SQLException error){
+        } catch (SQLException error) {
             throw new RuntimeException("Error updating wish", error);
         }
     }
-
 }

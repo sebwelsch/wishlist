@@ -96,22 +96,29 @@ public class WishListController {
         return "redirect:/overview";
     }
 
-    @GetMapping("/createwish")
-    public String showCreateWishPage() {
-
+    @GetMapping("/wishlist/{wishListId}/add")
+    public String showCreateWishPage(@PathVariable int wishListId, Model model) {
+        model.addAttribute("wishListId", wishListId);
         return "addWish";
     }
 
-    @PostMapping("/add")
-    public String addWish(@ModelAttribute Wish newWish, RedirectAttributes redirectAttributes) {
-
-        if (newWish.getName() == null || newWish.getName().isEmpty()) {
-            redirectAttributes.addFlashAttribute("error", "Feltet navn skal udfyldes!");
-            return "redirect:/createwish";
-        }
+    @PostMapping("/wish/add")
+    public String addWish(@ModelAttribute Wish newWish, @RequestParam int wishListId, RedirectAttributes redirectAttributes) {
+        newWish.setWishListId(wishListId);
         wishListService.saveNewWish(newWish);
         redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
-        return "redirect:/createwish";
+        return "redirect:/wishlist/" + wishListId;
+    }
+
+    @PostMapping("/wish/delete/{wishId}")
+    public String deleteWish(HttpSession session, RedirectAttributes redirectAttributes, @PathVariable int wishId) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        wishListService.deleteWish(wishId);
+        redirectAttributes.addFlashAttribute("success", "Ønsket blev slettet");
+        return "redirect:/overview";
     }
 
     @GetMapping("/wishlist/{wishListId}")
@@ -119,37 +126,39 @@ public class WishListController {
         WishList wishList = wishListService.getWishListById(wishListId);
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         User wishListOwner = wishListService.getUserById(wishList.getUserId());
+
         if ((loggedInUser != null) && (loggedInUser.getUserId() == wishList.getUserId())) {
-            model.addAttribute("wishListOwner", true);
+            model.addAttribute("canEditWishList", true);
+        } else {
+            model.addAttribute("canEditWishList", false);
         }
 
-            model.addAttribute("loggedInUser", loggedInUser);
 
         String currentUrl = request.getRequestURL().toString();
         model.addAttribute("currentUrl", currentUrl);
+
         model.addAttribute("wishList", wishList);
         model.addAttribute("wishes", wishListService.getWishesByWishListId(wishListId));
+        model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("wishListOwner", wishListOwner);
         return "wishList";
     }
 
     @PostMapping("/wish/reserve/{wishId}")
-    public String reserveWish(@PathVariable int wishId, RedirectAttributes redirectAttributes, Model model) {
-
+    public String reserveWish(@RequestParam int reservedByUserId, @PathVariable int wishId, RedirectAttributes redirectAttributes) {
         Wish existingWish = wishListService.findWishById(wishId);
-
         if (existingWish == null) {
             redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
             return "redirect:/overview";
         }
 
         if (existingWish.isReserved()) {
-            redirectAttributes.addFlashAttribute("error", "Ønsket er allerede reserveret");
+            wishListService.reserveWish(false, reservedByUserId, wishId);
+            redirectAttributes.addFlashAttribute("success", "Ønsket er ikke længere reserveret");
             return "redirect:/overview";
         }
 
-        wishListService.reserveWish(wishId);
-
+        wishListService.reserveWish(true, reservedByUserId, wishId);
         redirectAttributes.addFlashAttribute("success", "Ønsket er blevet reserveret");
         return "redirect:/overview";
     }
