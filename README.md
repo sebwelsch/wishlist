@@ -1,5 +1,7 @@
 # wishlist
 
+Vores SQL fil + Bilag ligger i /Docs
+
 ## Link to Azure web server
 ### https://wishlistc6.azurewebsites.net/
 
