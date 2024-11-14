@@ -1,5 +1,7 @@
 # wishlist
 
+Vores SQL script + bilag ligger under Docs
+
 ## Link to Azure web server
 ### https://wishlistc6.azurewebsites.net/
 
