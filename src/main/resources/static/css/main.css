@@ -52,17 +52,17 @@ button:hover, .view-link:hover {
     background-color: #4b0680;
 }
 
-.form-container {
+.form-info {
     max-width: 300px;
     margin: 0 auto;
     text-align: center;
 }
 
-.form-container p {
+.form-info p {
     margin: 10px 0;
 }
 
-.form-container a button {
+.form-info a button {
     width: 100%;
     background-color: #880be3;
     color: #fff;
@@ -70,7 +70,7 @@ button:hover, .view-link:hover {
     border: none;
 }
 
-.form-container a button:hover {
+.form-info a button:hover {
     background-color: #4b0680;
 }
 
@@ -130,4 +130,18 @@ header button:hover {
     font-size: 1.1em;
     color: #333;
     margin: 0 0 10px;
+}
+
+.wishlist-box form {
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.delete-button {
+    background-color: red;
+}
+
+.delete-button:hover {
+    background-color: darkred;
 }

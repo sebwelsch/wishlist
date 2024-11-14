@@ -186,4 +186,15 @@ public class WishListRepository {
         return wishes;
     }
 
+    public void deleteWishList(int wishListId) {
+        String query = "DELETE FROM wishlists WHERE wishlist_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishListId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException error) {
+            throw new RuntimeException("Error deleting wishlist", error);
+        }
+    }
 }
