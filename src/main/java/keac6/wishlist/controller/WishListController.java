@@ -73,14 +73,14 @@ public class WishListController {
         return "overview";
     }
 
-    @PostMapping("/wishlist/create")
-    public String createWishList(HttpSession session, @ModelAttribute WishList newWishList, RedirectAttributes redirectAttributes) {
+    @PostMapping("/wishlist/add")
+    public String addWishList(HttpSession session, @ModelAttribute WishList newWishList, RedirectAttributes redirectAttributes) {
         User loggedInUser = (User) session.getAttribute("loggedInUser");
         if (loggedInUser == null) {
             return "redirect:/login";
         }
         newWishList.setUserId(loggedInUser.getUserId());
-        wishListService.createWishList(newWishList);
+        wishListService.addWishList(newWishList);
         redirectAttributes.addFlashAttribute("success", "Ønskelisten blev oprettet");
         return "redirect:/overview";
     }
@@ -97,7 +97,7 @@ public class WishListController {
     }
 
     @GetMapping("/wishlist/{wishListId}/add")
-    public String showCreateWishPage(@PathVariable int wishListId, Model model) {
+    public String showAddWishPage(@PathVariable int wishListId, Model model) {
         model.addAttribute("wishListId", wishListId);
         return "addWish";
     }
@@ -133,7 +133,6 @@ public class WishListController {
             model.addAttribute("canEditWishList", false);
         }
 
-
         String currentUrl = request.getRequestURL().toString();
         model.addAttribute("currentUrl", currentUrl);
 
@@ -146,7 +145,7 @@ public class WishListController {
 
     @PostMapping("/wish/reserve/{wishId}")
     public String reserveWish(@RequestParam int reservedByUserId, @PathVariable int wishId, RedirectAttributes redirectAttributes) {
-        Wish existingWish = wishListService.findWishById(wishId);
+        Wish existingWish = wishListService.getWishById(wishId);
         if (existingWish == null) {
             redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
             return "redirect:/overview";
@@ -155,11 +154,11 @@ public class WishListController {
         if (existingWish.isReserved()) {
             wishListService.reserveWish(false, reservedByUserId, wishId);
             redirectAttributes.addFlashAttribute("success", "Ønsket er ikke længere reserveret");
-            return "redirect:/overview";
+            return "redirect:/wishlist/" + existingWish.getWishListId();
         }
 
         wishListService.reserveWish(true, reservedByUserId, wishId);
         redirectAttributes.addFlashAttribute("success", "Ønsket er blevet reserveret");
-        return "redirect:/overview";
+        return "redirect:/wishlist/" + existingWish.getWishListId();
     }
 }

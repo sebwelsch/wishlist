@@ -25,7 +25,7 @@
         <p th:text="${error}" class="danger"/>
     </div>
 
-    <form th:action="@{/wishlist/create}" method="post">
+    <form th:action="@{/wishlist/add}" method="post">
         <div>
             <h3><label for="wishListName">Lav en ny ønskeliste</label></h3>
             <input type="text" id="wishListName" name="wishListName" placeholder="Navn på ønskeliste" required>

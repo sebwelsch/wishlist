@@ -35,11 +35,13 @@
                 <p th:if="${wish.description != ''}" th:text="${'Beskrivelse: ' + wish.description}"></p>
                 <p th:text="${wish.price + ' Kr,-'}"></p>
                 <a th:if="${wish.link != ''}" th:href="${wish.link}">Link til ønsket</a>
-                <form th:if="${loggedInUser} and ${!canEditWishList} and ${!wish.reserved}" th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
+                <form th:if="${loggedInUser} and ${!canEditWishList} and ${!wish.reserved}"
+                      th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
                     <input type="hidden" name="reservedByUserId" th:value="${loggedInUser.userId}"/>
                     <button type="submit">Reserver ønske</button>
                 </form>
-                <form th:if="${loggedInUser} and ${loggedInUser.userId == wish.reservedByUserId} and ${wish.reserved}" th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
+                <form th:if="${loggedInUser} and ${loggedInUser.userId == wish.reservedByUserId} and ${wish.reserved}"
+                      th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
                     <input type="hidden" name="reservedByUserId" th:value="${loggedInUser.userId}"/>
                     <button type="submit">Fjern reservation</button>
                 </form>

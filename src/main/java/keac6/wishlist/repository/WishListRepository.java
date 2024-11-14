@@ -64,7 +64,6 @@ public class WishListRepository {
             pstmt.setString(4, newWish.getDescription());
             pstmt.setString(5, newWish.getLink());
 
-            pstmt.executeUpdate();
             int affectedRows = pstmt.executeUpdate();
             if (affectedRows > 0) {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -125,7 +124,7 @@ public class WishListRepository {
         }
     }
 
-    public void createWishList(WishList newWishList) {
+    public void addWishList(WishList newWishList) {
         String sql = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
         jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
     }
@@ -222,7 +221,7 @@ public class WishListRepository {
         }
     }
 
-    public Wish findWishById(int wish_Id) {
+    public Wish getWishById(int wish_Id) {
         String query = "SELECT * FROM wishes WHERE wish_id = ?";
         try (Connection connection = getDBConnection()) {
             PreparedStatement pstmt = connection.prepareStatement(query);

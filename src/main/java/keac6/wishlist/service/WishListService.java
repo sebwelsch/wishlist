@@ -43,8 +43,8 @@ public class WishListService {
         return passwordEncoder.matches(inputPassword, hashedPassword);
     }
 
-    public void createWishList(WishList newWishList) {
-        wishListRepository.createWishList(newWishList);
+    public void addWishList(WishList newWishList) {
+        wishListRepository.addWishList(newWishList);
     }
 
     public ArrayList<WishList> getAllWishLists(int userid) {
@@ -67,8 +67,8 @@ public class WishListService {
         wishListRepository.deleteWish(wishId);
     }
 
-    public Wish findWishById(int wish_id) {
-        return wishListRepository.findWishById(wish_id);
+    public Wish getWishById(int wish_id) {
+        return wishListRepository.getWishById(wish_id);
     }
 
     public void reserveWish(boolean reserved, int reservedByUserId, int wishId) {
