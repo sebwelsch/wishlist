@@ -21,7 +21,7 @@
     <div style="text-align: center">
         <h1 th:text="${wishList.wishListName}"></h1>
         <p th:text="${'Ønskeliste tilhørende ' + wishListOwner.getFirstName() + ' ' + wishListOwner.getLastName()}"></p>
-        <p th:if="${loggedInUser == ''}" class="danger">Log ind for at reservere ønsker</p>
+        <p th:if="${loggedInUser == null}" class="danger">Log ind for at reservere ønsker</p>
     </div>
 
     <a th:href="@{/wishlist/{wishListID}/add(wishListID=${wishList.getWishListId()})}" th:if="${canEditWishList}">
