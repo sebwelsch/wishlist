@@ -10,28 +10,47 @@
 <header>
     <a th:href="@{'/overview'}"><h1>wishlist</h1></a>
     <div style="text-align: center" th:if="${loggedInUser}">
-        <p th:text="${loggedInUser.getFirstName() + ' ' + loggedInUser.getLastName()()}"/>
+        <p th:text="${loggedInUser.getFirstName() + ' ' + loggedInUser.getLastName()}"/>
         <p th:text="${loggedInUser.getEmail()}" style="font-size: 0.8em"/>
     </div>
-    <a href="/logout" th:if="${loggedInUser}">
+    <a href="/logout" th:if="${loggedInUser}" class="danger">
         <button>Log ud</button>
     </a>
 </header>
 <div class="container">
     <div style="text-align: center">
         <h1 th:text="${wishList.wishListName}"></h1>
-        <p th:text="${wishListOwner.getFirstName() + ' ' + wishListOwner.getLastName()}"></p>
+        <p th:text="${'Ønskeliste tilhørende ' + wishListOwner.getFirstName() + ' ' + wishListOwner.getLastName()}"></p>
+        <p th:if="${loggedInUser == ''}" class="danger">Log ind for at reservere ønsker</p>
     </div>
-    <div class="wish-list">
+
+    <a th:href="@{/wishlist/{wishListID}/add(wishListID=${wishList.getWishListId()})}" th:if="${canEditWishList}">
+        <button type="button">Tilføj et ønske</button>
+    </a>
+
+    <div class="wishlist-container">
         <th:block th:each="wish : ${wishes}">
-            <div class="wish-item">
+            <div class="wishlist-box">
                 <p th:text="${'Navn: ' + wish.name}"></p>
-                <p th:text="${'Beskrivelse: ' + wish.description}"></p>
+                <p th:if="${wish.description != ''}" th:text="${'Beskrivelse: ' + wish.description}"></p>
                 <p th:text="${wish.price + ' Kr,-'}"></p>
                 <a th:if="${wish.link != ''}" th:href="${wish.link}">Link til ønsket</a>
+                <form th:if="${loggedInUser} and ${!canEditWishList} and ${!wish.reserved}" th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
+                    <input type="hidden" name="reservedByUserId" th:value="${loggedInUser.userId}"/>
+                    <button type="submit">Reserver ønske</button>
+                </form>
+                <form th:if="${loggedInUser} and ${loggedInUser.userId == wish.reservedByUserId} and ${wish.reserved}" th:action="@{/wish/reserve/{wishId}(wishId=${wish.id})}" method="post">
+                    <input type="hidden" name="reservedByUserId" th:value="${loggedInUser.userId}"/>
+                    <button type="submit">Fjern reservation</button>
+                </form>
+
+                <form th:if="${canEditWishList}" th:action="@{/wish/delete/{wishId}(wishId=${wish.id})}" method="post">
+                    <button class="delete-button" type="submit">Slet</button>
+                </form>
             </div>
         </th:block>
     </div>
+
     <div class="form-container">
         <label for="currentUrl">Del ønskelisten:</label>
         <input type="text" id="currentUrl" th:value="${currentUrl}" readonly onclick="this.select()">

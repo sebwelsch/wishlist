@@ -145,3 +145,21 @@ header button:hover {
 .delete-button:hover {
     background-color: darkred;
 }
+
+.wish-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.wishlist-box a {
+    display: inline-block;
+    background-color: #880be3;
+    color: white;
+    padding: 8px 15px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+}

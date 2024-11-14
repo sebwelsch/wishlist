@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" th:href="@{/css/main.css?v=6}">
     <title>Ønskeliste</title>
-
-
 </head>
 <body>
-<form th:action="@{/add}" method="post">
+<form th:action="@{/wish/add}" method="post">
+    <input type="hidden" name="wishListId" th:value="${wishListId}">
+
     <label for="navn">Navn (påkrævet):</label><br>
     <input type="text" id="navn" name="name" required><br><br>
 
@@ -31,12 +31,5 @@
     </div>
 
 </form>
-<div th:if="${error}">
-    <p th:text="${error}">
-
-    </p>
-</div>
-
-
 </body>
 </html>
