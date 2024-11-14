@@ -8,8 +8,9 @@ public class WishList {
     public WishList() {
     }
 
-    public WishList(int wishListId, String wishListName) {
+    public WishList(int wishListId, int userId, String wishListName) {
         this.wishListId = wishListId;
+        this.userId = userId;
         this.wishListName = wishListName;
     }
 
