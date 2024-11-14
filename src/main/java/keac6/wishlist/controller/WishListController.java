@@ -96,31 +96,6 @@ public class WishListController {
         return "redirect:/overview";
     }
 
-    @GetMapping("/wishlist/{wishListId}/add")
-    public String showAddWishPage(@PathVariable int wishListId, Model model) {
-        model.addAttribute("wishListId", wishListId);
-        return "addWish";
-    }
-
-    @PostMapping("/wish/add")
-    public String addWish(@ModelAttribute Wish newWish, @RequestParam int wishListId, RedirectAttributes redirectAttributes) {
-        newWish.setWishListId(wishListId);
-        wishListService.saveNewWish(newWish);
-        redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
-        return "redirect:/wishlist/" + wishListId;
-    }
-
-    @PostMapping("/wish/delete/{wishId}")
-    public String deleteWish(HttpSession session, RedirectAttributes redirectAttributes, @PathVariable int wishId) {
-        User loggedInUser = (User) session.getAttribute("loggedInUser");
-        if (loggedInUser == null) {
-            return "redirect:/login";
-        }
-        wishListService.deleteWish(wishId);
-        redirectAttributes.addFlashAttribute("success", "Ønsket blev slettet");
-        return "redirect:/overview";
-    }
-
     @GetMapping("/wishlist/{wishListId}")
     public String showWishListPage(@PathVariable int wishListId, Model model, HttpSession session, HttpServletRequest request) {
         WishList wishList = wishListService.getWishListById(wishListId);
@@ -141,6 +116,31 @@ public class WishListController {
         model.addAttribute("loggedInUser", loggedInUser);
         model.addAttribute("wishListOwner", wishListOwner);
         return "wishList";
+    }
+
+    @GetMapping("/wishlist/{wishListId}/add")
+    public String showAddWishPage(@PathVariable int wishListId, Model model) {
+        model.addAttribute("wishListId", wishListId);
+        return "addWish";
+    }
+
+    @PostMapping("/wish/add")
+    public String addWish(@ModelAttribute Wish newWish, @RequestParam int wishListId, RedirectAttributes redirectAttributes) {
+        newWish.setWishListId(wishListId);
+        wishListService.addWish(newWish);
+        redirectAttributes.addFlashAttribute("success", "Ønsket er blevet tilføjet!");
+        return "redirect:/wishlist/" + wishListId;
+    }
+
+    @PostMapping("/wish/delete/{wishId}")
+    public String deleteWish(HttpSession session, RedirectAttributes redirectAttributes, @PathVariable int wishId) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            return "redirect:/login";
+        }
+        wishListService.deleteWish(wishId);
+        redirectAttributes.addFlashAttribute("success", "Ønsket blev slettet");
+        return "redirect:/overview";
     }
 
     @PostMapping("/wish/reserve/{wishId}")

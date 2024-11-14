@@ -27,8 +27,8 @@ public class WishListService {
         wishListRepository.saveNewUser(newUser);
     }
 
-    public void saveNewWish(Wish newWish) {
-        wishListRepository.saveNewWish(newWish);
+    public void addWish(Wish newWish) {
+        wishListRepository.addWish(newWish);
     }
 
     public User getUserByEmail(String email) {

@@ -4,7 +4,6 @@ import keac6.wishlist.model.User;
 import keac6.wishlist.model.Wish;
 import keac6.wishlist.model.WishList;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -26,12 +25,6 @@ public class WishListRepository {
         return DriverManager.getConnection(db_url, db_username, db_password);
     }
 
-    private JdbcTemplate jdbcTemplate;
-
-    public WishListRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
     public void saveNewUser(User newUser) {
         String query = "INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
@@ -51,30 +44,6 @@ public class WishListRepository {
             }
         } catch (SQLException error) {
             throw new RuntimeException("Error saving new user to database", error);
-        }
-    }
-
-    public void saveNewWish(Wish newWish) {
-        String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
-        try (Connection connection = getDBConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            pstmt.setInt(1, newWish.getWishListId());
-            pstmt.setString(2, newWish.getName());
-            pstmt.setInt(3, newWish.getPrice());
-            pstmt.setString(4, newWish.getDescription());
-            pstmt.setString(5, newWish.getLink());
-
-            int affectedRows = pstmt.executeUpdate();
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        newWish.setId(generatedKeys.getInt(1));
-                    }
-                }
-            }
-
-        } catch (SQLException error) {
-            throw new RuntimeException("Error saving new wish", error);
         }
     }
 
@@ -124,9 +93,37 @@ public class WishListRepository {
         }
     }
 
+
     public void addWishList(WishList newWishList) {
-        String sql = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
-        jdbcTemplate.update(sql, newWishList.getWishListName(), newWishList.getUserId());
+        String query = "INSERT INTO wishlists (wishlist_name, user_id) VALUES (?, ?)";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setString(1, newWishList.getWishListName());
+            pstmt.setInt(2, newWishList.getUserId());
+
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        newWishList.setWishListId(generatedKeys.getInt(1));
+                    }
+                }
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error saving new wish", error);
+        }
+    }
+
+    public void deleteWishList(int wishListId) {
+        String query = "DELETE FROM wishlists WHERE wishlist_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishListId);
+
+            pstmt.executeUpdate();
+        } catch (SQLException error) {
+            throw new RuntimeException("Error deleting wishlist", error);
+        }
     }
 
     public ArrayList<WishList> getAllWishLists(int userid) {
@@ -171,41 +168,27 @@ public class WishListRepository {
         return null;
     }
 
-    public ArrayList<Wish> getWishesByWishListId(int wishListId) {
-        ArrayList<Wish> wishes = new ArrayList<>();
-        String query = "SELECT * FROM wishes WHERE wishlist_id = ?";
+    public void addWish(Wish newWish) {
+        String query = "INSERT INTO wishes (wishlist_id, wish_name, wish_price, wish_description, wish_url) VALUES (?, ?, ?, ?, ?)";
         try (Connection connection = getDBConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, wishListId);
-            ResultSet rs = pstmt.executeQuery();
+            PreparedStatement pstmt = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            pstmt.setInt(1, newWish.getWishListId());
+            pstmt.setString(2, newWish.getName());
+            pstmt.setInt(3, newWish.getPrice());
+            pstmt.setString(4, newWish.getDescription());
+            pstmt.setString(5, newWish.getLink());
 
-            while (rs.next()) {
-                wishes.add(new Wish(
-                        rs.getInt("wish_id"),
-                        rs.getInt("wishlist_id"),
-                        rs.getString("wish_name"),
-                        rs.getString("wish_description"),
-                        rs.getInt("wish_price"),
-                        rs.getString("wish_url"),
-                        rs.getBoolean("reserved"),
-                        rs.getInt("reserved_by_user_id")
-                ));
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        newWish.setId(generatedKeys.getInt(1));
+                    }
+                }
             }
-        } catch (SQLException error) {
-            throw new RuntimeException("Error retrieving wishes from database", error);
-        }
-        return wishes;
-    }
 
-    public void deleteWishList(int wishListId) {
-        String query = "DELETE FROM wishlists WHERE wishlist_id = ?";
-        try (Connection connection = getDBConnection()) {
-            PreparedStatement pstmt = connection.prepareStatement(query);
-            pstmt.setInt(1, wishListId);
-
-            pstmt.executeUpdate();
         } catch (SQLException error) {
-            throw new RuntimeException("Error deleting wishlist", error);
+            throw new RuntimeException("Error saving new wish", error);
         }
     }
 
@@ -244,6 +227,32 @@ public class WishListRepository {
             throw new RuntimeException("Error retrieving user from database", error);
         }
         return null;
+    }
+
+    public ArrayList<Wish> getWishesByWishListId(int wishListId) {
+        ArrayList<Wish> wishes = new ArrayList<>();
+        String query = "SELECT * FROM wishes WHERE wishlist_id = ?";
+        try (Connection connection = getDBConnection()) {
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, wishListId);
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                wishes.add(new Wish(
+                        rs.getInt("wish_id"),
+                        rs.getInt("wishlist_id"),
+                        rs.getString("wish_name"),
+                        rs.getString("wish_description"),
+                        rs.getInt("wish_price"),
+                        rs.getString("wish_url"),
+                        rs.getBoolean("reserved"),
+                        rs.getInt("reserved_by_user_id")
+                ));
+            }
+        } catch (SQLException error) {
+            throw new RuntimeException("Error retrieving wishes from database", error);
+        }
+        return wishes;
     }
 
     public void reserveWish(boolean reserved, int reservedByUserId, int wishId) {
