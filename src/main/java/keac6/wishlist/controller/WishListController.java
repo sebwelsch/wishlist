@@ -137,40 +137,6 @@ public class WishListController {
         return "redirect:/overview";
     }
 
-    @GetMapping("/wish/edit/{wish_Id}")
-    public String showWishEditPage(@PathVariable int wish_Id, Model model) {
-       Wish existingWish = wishListService.findWishById(wish_Id);
-
-       if (existingWish == null) {
-           model.addAttribute("error", "Ønsket blev ikke fundet!");
-           return "redirect:/overview";
-       }
-
-       model.addAttribute("wish", existingWish);
-       return "updateWish";
-    }
-
-    @PostMapping("/wish/update")
-    public String updateWish(@ModelAttribute Wish updatedWish, RedirectAttributes redirectAttributes, Model model) {
-
-        Wish existingWish = wishListService.findWishById(updatedWish.getId());
-
-        if (existingWish == null) {
-            redirectAttributes.addFlashAttribute("error", "Ønsket blev ikke fundet.");
-            return "redirect:/overview";
-        }
-
-
-        wishListService.updateWish(updatedWish);
-
-
-
-        model.addAttribute("wish", updatedWish);
-
-        redirectAttributes.addFlashAttribute("success", "Ønsket blev opdateret!");
-        return "redirect:/overview";
-    }
-
     @PostMapping("/wish/reserve/{wishId}")
     public String reserveWish(@PathVariable int wishId, RedirectAttributes redirectAttributes, Model model) {
 

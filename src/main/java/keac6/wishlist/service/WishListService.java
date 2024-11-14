@@ -64,11 +64,6 @@ public class WishListService {
         return wishListRepository.findWishById(wish_id);
     }
 
-    public void updateWish(Wish updatedWish){
-        wishListRepository.updateWish(updatedWish);
-    }
-
-
     public void reserveWish(int wishId) {
 
     }
